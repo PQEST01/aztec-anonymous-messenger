@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ethereum-node:
+    image: ghcr.io/foundry-rs/foundry:stable
+    entrypoint: ["anvil"]
+    command: ["--host", "0.0.0.0", "--port", "8545", "--chain-id", "31337"]
+    networks:
+      - aztec-network
+    ports:
+      - 8545:8545
+
+  aztec-sandbox:
+    image: aztecprotocol/aztec-sandbox
+    environment:
+      - ETHEREUM_HOST=http://ethereum-node:8545
+    ports:
+      - 8080:8080
+    networks:
+      - aztec-network
+    depends_on:
+      - ethereum-node
+
+networks:
+  aztec-network:
