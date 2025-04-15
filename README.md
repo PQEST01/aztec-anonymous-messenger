@@ -86,11 +86,13 @@ nargo codegen-verifier
 ## 📢 Screenshots
 
 ### Homepage
-![Home](screenshots/homepage.png)
+![Opening](screenshots/001.png)
 
 ### Group Chat Interface
-![Chat](screenshots/chat.png)
-
+![Opening](screenshots/002.png)
+![Opening](screenshots/003.png)
+![Opening](screenshots/004.png)
+![Opening](screenshots/005.png)
 ---
 
 ## 👤 About the Developer
