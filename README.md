@@ -56,22 +56,6 @@ npm run dev
 ---
 
 ## 📚 Noir Smart Contract
-
-Minimal Noir contract that accepts a message hash and timestamp, returns a public field.
-
-```rust
-fn main(msg_hash: Field, timestamp: pub Field) -> pub Field {
-    assert(msg_hash != 0);
-    timestamp + 1
-}
-```
-
-Compiled using:
-```bash
-nargo compile
-nargo codegen-verifier
-```
-
 ---
 
 ## 🔧 Tech Stack
