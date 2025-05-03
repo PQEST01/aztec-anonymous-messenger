@@ -13,6 +13,7 @@ A Zero-Knowledge (ZK) powered anonymous messaging app built using **Noir** and *
 - 📡 Wallet-based login (MetaMask)
 - 🔗 Invite links for group sharing
 - 🔧 Built using Aztec's PXE client and Noir smart contracts
+- ⚙ Noir smart contracts + JavaScript SDK integrations.
 
 ---
 
