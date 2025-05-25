@@ -4,6 +4,13 @@ A Zero-Knowledge (ZK) powered anonymous messaging app built using **Noir** and *
 
 ---
 
+🌐 Project Website
+In an age where privacy is no longer a luxury, but a necessity, we believe that clarity of vision is just as essential as strong encryption.
+
+To help you understand why this project exists, who is building it, and where it’s headed, we’ve created a dedicated information website:
+
+👉 www.aztecanonymousmessenger.com
+
 ## 🔎 Features
 
 - 📁 Fully private group chats using ZK cryptography
