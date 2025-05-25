@@ -64,7 +64,18 @@ npm run dev
 ---
 
 ## 📚 Noir Smart Contract
----
+This project includes a custom Noir smart contract designed to handle private message creation and submission on the Aztec Network.
+
+The contract defines a `sendMessage` function, which is invoked within a private context to commit encrypted messages to the network without revealing any metadata.
+
+All logic is built using [Aztec’s Noir DSL](https://noir-lang.org/) and compiled with `nargo`. The resulting artifacts are integrated directly into the frontend.
+
+> Messages are not just encrypted — they are shielded on-chain, zero-knowledge validated, and user-agnostic by design.
+
+To explore or modify the contract, visit:
+
+`/contracts/message_contract/src/main.nr`
+[📁 View the source on GitHub](./contracts/message_contract/src/main.nr)
 
 ## 🔧 Tech Stack
 
