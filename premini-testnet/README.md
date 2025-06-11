@@ -1,25 +1,25 @@
 # Aztec Anonymous Messenger – Pre-Mini Testnet 📩🔒
 
-Bu klasör, Aztec Anonymous Messenger projesinin Pre-Mini Testnet için hazırlanmış temiz bir çalışma alanıdır.
+This directory contains a clean working environment for the **Aztec Anonymous Messenger** project's Pre-Mini Testnet deployment.
 
-## 📝 Projenin Amacı
-- Kullanıcıların anonim ve gizli şekilde mesajlaşmasını sağlamak.
-- Mesajların Noir dili kullanılarak şifrelenip Aztec Network üzerinde çalışması.
+## 📝 Project Goals
+- Enable users to send anonymous, encrypted messages.
+- Utilize Aztec Network's privacy features via the Noir smart contract language.
 
-## 📂 Dosyalar
-- **`contract.nr`**: Noir dilinde hazırlanan gizlilik odaklı smart kontrat.
-- **`deploy.ts`**: Testnet üzerine kontratın yüklenmesini sağlayan script.
+## 📂 Included Files
+- **`contract.nr`**: Privacy-focused smart contract written in Noir.
+- **`deploy.ts`**: Script for deploying the smart contract to the Aztec testnet.
 
-## 🚧 Mevcut Durum ve İlerleme
-- Kontrat kodu temel fonksiyonları ile hazırlandı.
-- Deploy süreci test edilmekte, düzeltmeler devam ediyor.
+## 🚧 Current Status & Progress
+- The Noir contract is prepared with basic functionalities.
+- Deployment scripts are currently being tested and refined.
 
-## ⏳ Yapılacaklar (Next Steps)
-- Deploy sürecindeki hataların giderilmesi.
-- Kontrat fonksiyonlarının detaylandırılması ve optimize edilmesi.
-- Frontend entegrasyonu ve kullanıcı testlerinin gerçekleştirilmesi.
+## ⏳ Next Steps
+- Fix remaining deployment issues.
+- Enhance and optimize smart contract functions.
+- Integrate frontend and conduct user tests.
 
-Bu dal sürekli olarak güncellenecektir.
+This branch will be regularly updated as development continues.
 
 📌 **Branch:** `pre-mini-testnet`
 
