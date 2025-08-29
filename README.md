@@ -1,4 +1,4 @@
-# Aztec Anonymous Messenger
+------# Aztec Anonymous Messenger
 
 A Zero-Knowledge (ZK) powered anonymous messaging app built using **Noir** and **Aztec SDK**. This project allows users to communicate privately and securely through ephemeral group chats that leverage privacy-preserving smart contracts on the Aztec network.
 
