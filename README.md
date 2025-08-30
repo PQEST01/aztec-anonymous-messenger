@@ -1,115 +1,87 @@
-------# Aztec Anonymous Messenger
+# 🚀Aztec Anonymous Messenger — pre-mini-testnet
 
-A Zero-Knowledge (ZK) powered anonymous messaging app built using **Noir** and **Aztec SDK**. This project allows users to communicate privately and securely through ephemeral group chats that leverage privacy-preserving smart contracts on the Aztec network.
+**Branch;** pre-mini-testnet  
 
----
+**Status:** minimal working slice (account create → deploy → send) using Aztec SDK + Noir.  
 
-🌐 Project Website
-In an age where privacy is no longer a luxury, but a necessity, we believe that clarity of vision is just as essential as strong encryption.
+**Demo backend:** https://api.aztecanonymousmessenger.com  
 
-To help you understand why this project exists, who is building it, and where it’s headed, we’ve created a dedicated information website:
+**ABI:** abi/PrivateMessenger.json  
 
-👉 www.aztecanonymousmessenger.com
+This branch focuses on a simple, wallet-owned flow that anyone can run with curl and see real tx hashes.  
 
-## 🔎 Features
+## 🔗Deployments  
 
-- 📁 Fully private group chats using ZK cryptography
-- 🛡️ Self-destructing messages (after read or with a timer)
-- 📅 Temporary identity with nickname support
-- 🚫 No real account or identity required
-- 📡 Wallet-based login (MetaMask)
-- 🔗 Invite links for group sharing
-- 🔧 Built using Aztec's PXE client and Noir smart contracts
-- ⚙ Noir smart contracts + JavaScript SDK integrations.
+**PrivateMessenger (app contract):** 0x0edecf304e4692709f9752bad2308d38e8fb1ab512bf0e1ee207905eefe13415  
 
----
+**PXE URL (dev/sandbox):** http://127.0.0.1:8080
 
-## 📂 Project Structure
+**ABI:** abi/PrivateMessenger.json  
 
+## 🧪Quickstart  
+
+This is the recommended path for users: create a new wallet, deploy it, then send a message.  
+
+**1) Backend status**  
 ```
-aztec-messenger/
-├── aztec-private-messenger/       # Frontend and backend integration
-│   ├── contracts/                 # Noir contract artifact files (.json/.wasm)
-│   ├── data/                      # Message storage and in-memory state
-│   ├── server.js                 # PXE + Contract deploy + Backend logic
-│   └── pages/                    # Next.js frontend pages
-└── noir/
-    └── message_contract_test/    # Noir contract source and build
+curl -s https://api.aztecanonymousmessenger.com/status \
+| jq '{ ok, pxe, mode, contract }'
 ```
+**Expected (example):**  
 
----
+{ "ok": true, "pxe": "http://127.0.0.1:8080", "mode": "sandbox", "contract": "0x..." }  
 
-## ⚡ Quick Start (Local)
-
-1. **Install dependencies:**
-
-```bash
-npm install
+**2)👤 Create your wallet**  
+```
+curl -sX POST https://api.aztecanonymousmessenger.com/create-account \
+  -H 'content-type: application/json' \
+  -d '{"alias":"first-demo"}' \
+| tee /tmp/create.json \
+| jq '{ ok, alias, address, registeredInPXE, deployed, secretKeyHex, signingKeyHex }'  
 ```
 
-2. **Run the backend server:**
+**Copy the value of secretKeyHex from the output above (it is your wallet’s private key for this demo).**  
 
-```bash
-npm run start
+**3)📦 Deploy your wallet (writes on Aztec)**  
 ```
+SK=$(jq -r .secretKeyHex /tmp/create.json)
 
-3. **Run the frontend:**
+curl -sS -X POST https://api.aztecanonymousmessenger.com/deploy-account \
+  -H 'content-type: application/json' \
+  -d "{\"alias\":\"first-demo\",\"secretKeyHex\":\"$SK\"}" \
+| jq '{ ok, alias, address, deployed, txHash }'
+ ```  
 
-```bash
-npm run dev
+**4)💬 Send a message (example)**  
 ```
+curl -sS -X POST https://api.aztecanonymousmessenger.com/send \
+  -H 'content-type: application/json' \
+  -d '{"toAlias":"demo-peer","message":"hello from Aztec!"}' \
+| jq '{ ok, txHash, status }'
+```
+You should see deployed: true and a txHash.
 
-> Make sure your Noir contract is compiled and the `.json` and `.wasm` files are present under `/contracts/`.
+**Contract method defaults to send. If your ABI uses a different method name, set MESSENGER_METHOD=<yourMethod> in .env.**  
 
----
+⚙️**Environment (.env example)**  
+```
+PORT=3000  
+PXE_URL=http://127.0.0.1:8080  
+MESSENGER_ADDR=0x0eedcf30e4692709f9752bad2308d38e8fb1lab512bf0e1ee207905eefe13415
+MESSENGER_METHOD=send  
+```
+## 🧰 Developers  
 
-## 📚 Noir Smart Contract
-This project includes a custom Noir smart contract designed to handle private message creation and submission on the Aztec Network.
+For local development, ensure a PXE is reachable at PXE_URL (sandbox is easiest):  
 
-The contract defines a `sendMessage` function, which is invoked within a private context to commit encrypted messages to the network without revealing any metadata.
+Start a sandbox PXE (one-liner varies by environment; follow Aztec installer docs).  
 
-All logic is built using [Aztec’s Noir DSL](https://noir-lang.org/) and compiled with `nargo`. The resulting artifacts are integrated directly into the frontend.
+Restart backend after updating .env:  
+```
+npm i
+pm2 start ecosystem.config.cjs --only aztec-api || pm2 restart aztec-api
+pm2 logs aztec-api --lines 100
+``` 
 
-> Messages are not just encrypted — they are shielded on-chain, zero-knowledge validated, and user-agnostic by design.
 
-To explore or modify the contract, visit:
-
-`/contracts/message_contract/src/main.nr`
-[📁 View the source on GitHub](./contracts/message_contract/src/main.nr)
-
-## 🔧 Tech Stack
-
-- **Frontend:** React (Next.js)
-- **Backend:** Node.js + Express
-- **ZK Layer:** Noir + Aztec SDK (PXE)
-- **Wallet:** MetaMask
-
----
-
-## 📢 Screenshots
-
-### Homepage
-![Opening](screenshots/001.png)
-
-### Group Chat Interface
-![Opening](screenshots/002.png)
-![Opening](screenshots/003.png)
-![Opening](screenshots/004.png)
-![Opening](screenshots/005.png)
----
-
-## 👤 About the Developer
-
-- **GitHub:** [PQEST01](https://github.com/PQEST01)
-- **Discord:** pqest
-
----
-
-## ✉ Feedback
-
-Feel free to open issues or pull requests. You can also reach out to me on [Discord](https://discord.gg/aztec)!
-
----
-
-> This project is developed for educational and experimental purposes. Contributions and improvements are welcome!
-
+Contact: GitHub Issues/Discussions (or your preferred channel)
