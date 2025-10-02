@@ -13,11 +13,9 @@ To help you understand why this project exists, who is building it, and where it
 
 ## 🔎 Features
 
-- 📁 Fully private group chats using ZK cryptography
-- 🛡️ Self-destructing messages (after read or with a timer)
+- 📁 Fully private chats using ZK cryptography
 - 📅 Temporary identity with nickname support
 - 🚫 No real account or identity required
-- 📡 Wallet-based login (MetaMask)
 - 🔗 Invite links for group sharing
 - 🔧 Built using Aztec's PXE client and Noir smart contracts
 - ⚙ Noir smart contracts + JavaScript SDK integrations.
@@ -82,7 +80,10 @@ To explore or modify the contract, visit:
 - **Frontend:** React (Next.js)
 - **Backend:** Node.js + Express
 - **ZK Layer:** Noir + Aztec SDK (PXE)
-- **Wallet:** MetaMask
+
+## ⚡ Status
+This project is **actively maintained** and improved in small but steady iterations.  
+Our focus is on demonstrating **real-world private messaging on Aztec testnet**. 
 
 ---
 
@@ -104,6 +105,10 @@ To explore or modify the contract, visit:
 - **Discord:** pqest
 
 ---
+
+## 🤝 Contributing
+This project is open to collaboration.  
+If you are interested in ZK applications, Noir contracts, or Aztec integrations, feel free to fork, report issues, and suggest improvements.  
 
 ## ✉ Feedback
 
