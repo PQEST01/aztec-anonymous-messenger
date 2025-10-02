@@ -90,7 +90,7 @@ Our focus is on demonstrating **real-world private messaging on Aztec testnet**.
 ## 📢 Screenshots
 
 ### Homepage
-![Opening](screenshots\001.png)
+![Opening](screenshots/001.png)
 
 ### Group Chat Interface
 ![Opening](screenshots/002.png)
