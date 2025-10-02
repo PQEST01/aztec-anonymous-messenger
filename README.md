@@ -31,8 +31,8 @@ aztec-messenger/
 │   ├── data/                      # Message storage and in-memory state
 │   ├── server.js                 # PXE + Contract deploy + Backend logic
 │   └── pages/                    # Next.js frontend pages
-└── noir/
-    └── message_contract_test/    # Noir contract source and build
+└── src/
+    └── main.nr                   # Noir contract source and build
 ```
 
 ---
@@ -73,7 +73,7 @@ All logic is built using [Aztec’s Noir DSL](https://noir-lang.org/) and compil
 To explore or modify the contract, visit:
 
 `/contracts/message_contract/src/main.nr`
-[📁 View the source on GitHub](./contracts/message_contract/src/main.nr)
+[📁 View the source on GitHub](./src/main.nr)
 
 ## 🔧 Tech Stack
 
@@ -116,5 +116,4 @@ Feel free to open issues or pull requests. You can also reach out to me on [Disc
 
 ---
 
-> This project is developed for educational and experimental purposes. Contributions and improvements are welcome!
 
