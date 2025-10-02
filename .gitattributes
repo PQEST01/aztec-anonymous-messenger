@@ -1,0 +1,26 @@
+
+*.nr linguist-language=Noir
+circuits/** linguist-language=Noir
+noir/** linguist-language=Noir
+aztec-private-messenger/** linguist-language=Noir
+
+
+*.js linguist-vendored=true
+*.jsx linguist-vendored=true
+*.ts linguist-vendored=true
+*.tsx linguist-vendored=true
+*.sol linguist-vendored=true
+*.json linguist-vendored=true
+*.yml linguist-vendored=true
+*.yaml linguist-vendored=true
+*.toml linguist-vendored=true
+*.md linguist-documentation=true
+*.css linguist-vendored=true
+*.scss linguist-vendored=true
+*.html linguist-vendored=true
+
+
+*.config.* linguist-vendored=true
+*.lock linguist-vendored=true
+package.json linguist-vendored=true
+Cargo.toml linguist-vendored=true
