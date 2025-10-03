@@ -1,0 +1,96 @@
+version: 2
+updates:
+  # GitHub Actions bağımlılıkları
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    reviewers:
+      - "PQEST01"
+
+  # Docker bağımlılıkları (eğer Docker-compose.yml varsa)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
+      - "docker"
+    reviewers:
+      - "PQEST01"
+    # Aztec/PXE imajları için
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # npm bağımlılıkları (aztec-private-messenger içinde package.json varsa)
+  - package-ecosystem: "npm"
+    directory: "/aztec-private-messenger"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "aztec"
+    reviewers:
+      - "PQEST01"
+    # Aztec SDK güncellemelerini kontrollü yap
+    versioning-strategy: increase
+    ignore:
+      # Major güncellemeleri manuel kontrol et
+      - dependency-name: "@aztec/*"
+        update-types: ["version-update:semver-major"]
+      # Noir toolchain'i manuel güncelle
+      - dependency-name: "noir-lang"
+        update-types: ["version-update:semver-major"]
+
+  # npm bağımlılıkları (noir klasöründe package.json varsa)
+  - package-ecosystem: "npm"
+    directory: "/noir"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "noir"
+    reviewers:
+      - "PQEST01"
+
+  # Cargo bağımlılıkları (eğer Rust/Cargo kullanıyorsan)
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
+      - "rust"
+    reviewers:
+      - "PQEST01"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
