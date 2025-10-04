@@ -73,7 +73,7 @@ All logic is built using [Aztec’s Noir DSL](https://noir-lang.org/) and compil
 To explore or modify the contract, visit:
 
 `/contracts/message_contract/src/main.nr`
-[📁 View the source on GitHub](./src/main.nr)
+[📁 View the source on GitHub](/src/main.nr)
 
 ## Deployed Contract
 
