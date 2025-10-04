@@ -79,7 +79,7 @@ To explore or modify the contract, visit:
 
 **Network:** Aztec Testnet  
 **Contract Address:** `0x0edecf304e4692709f9752bad2308d38e8fb1ab512bf0e1ee207905eefe13415`  
-**ABI:** [View ABI](.src/counter-PrivateMessenger.json)  
+**ABI:** [View ABI](https://github.com/PQEST01/aztec-anonymous-messenger/blob/main/src/counter-PrivateMessenger.json)  
 
 ## 🔧 Tech Stack
 
