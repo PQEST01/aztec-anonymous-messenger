@@ -75,11 +75,18 @@ To explore or modify the contract, visit:
 `/contracts/message_contract/src/main.nr`
 [📁 View the source on GitHub](./src/main.nr)
 
+## Deployed Contract
+
+**Network:** Aztec Testnet  
+**Contract Address:** `0x0edecf304e4692709f9752bad2308d38e8fb1ab512bf0e1ee207905eefe13415`  
+**ABI:** [View ABI](.src/counter-PrivateMessenger.json)  
+
 ## 🔧 Tech Stack
 
-- **Frontend:** React (Next.js)
-- **Backend:** Node.js + Express
-- **ZK Layer:** Noir + Aztec SDK (PXE)
+- **Smart Contracts:** Noir
+- **Network:** Aztec Testnet
+- **Toolchain:** Nargo, Aztec CLI
+- **Zero-Knowledge Proofs:** ZK-SNARKs via Aztec Protocol
 
 ## ⚡ Status
 This project is **actively maintained** and improved in small but steady iterations.  
