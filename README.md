@@ -1,87 +1,191 @@
-# 🚀Aztec Anonymous Messenger — pre-mini-testnet
+# 🕵️‍♂️ PrivateMessenger — Private Messaging on Aztec Network
 
-**Branch;** pre-mini-testnet  
+**PrivateMessenger** is a zero-knowledge messaging contract built on **Aztec L2**, enabling users to send and receive **encrypted private notes** directly on-chain.  
+Each message is stored as a **`MessageNote`**, discoverable only by its intended recipient via the **PXE (Private Execution Environment)**.
 
-**Status:** minimal working slice (account create → deploy → send) using Aztec SDK + Noir.  
+> The contract leverages Aztec’s `note` system, tagged encrypted logs, and nullifier logic to ensure message privacy, integrity, and non-replayability.
 
-**Demo backend:** https://api.aztecanonymousmessenger.com  
-
-**ABI:** abi/PrivateMessenger.json  
-
-This branch focuses on a simple, wallet-owned flow that anyone can run with curl and see real tx hashes.  
+---
 
 ## 🔗Deployments  
 
-**PrivateMessenger (app contract):** 0x0edecf304e4692709f9752bad2308d38e8fb1ab512bf0e1ee207905eefe13415  
+**PrivateMessenger (app contract):** 0x270f4eccd3e6a4082d51a2010c7adde967df0dc89b480bfbe65ed01ec6f2e921  
 
-**PXE URL (dev/sandbox):** http://127.0.0.1:8080
+**PXE URL:** https://aztec-alpha-testnet-fullnode.zkv.xyz
 
-**ABI:** abi/PrivateMessenger.json  
+**ABI:** src/contract/PrivateMessenger.json  
 
-## 🧪Quickstart  
+---
 
-This is the recommended path for users: create a new wallet, deploy it, then send a message.  
+## ⚙️ Architecture Overview
 
-**1) Backend status**  
+PrivateMessenger works as a **two-layer system**:
+
+1. **Contract Layer (Noir Contract):**  
+   Handles note creation, message indexing, and bounded retrieval via `get_messages(owner, offset)`.
+
+2. **Client Layer (PXE + SDK):**  
+   Runs message discovery and decryption logic locally through the PXE node or SDK.  
+   The frontend interacts with the contract through **Azguard Wallet**, a custom wallet integrated with Aztec.js.
+
+---
+
+## 🔐 Azguard Wallet Integration
+
+The project integrates **Azguard Wallet** as the main authentication and transaction layer.  
+Azguard acts as a **bridge** between the front-end UI and the Aztec private environment (PXE + SDK).  
+
+### **Integration Overview**
+
+1. **Wallet Connection**  
+   The front-end uses the `@azguard/aztec-wallet` package.  
+   When the user clicks **“Connect Wallet”**, the wallet injects a session key and exposes an Aztec-compatible account object:
+
+   ```ts
+   import { useAzguard } from "@azguard/react";
+
+   const { connect, account, pxe } = useAzguard();
+   await connect(); // establishes PXE session + account identity
+   ```
+
+   The `account.address` is then passed to the contract as the `owner`.
+
+---
+
+2. **Message Encryption & Sending**  
+   The wallet includes a **local encryption module** compatible with Aztec notes.  
+   When the user sends a message:
+
+   ```ts
+   const encryptedPayload = await wallet.encryptMessage(receiver, content);
+   await contract.methods.send_message(receiver, encryptedPayload).send();
+   ```
+
+   - The message is encrypted client-side.  
+   - The payload is wrapped as a **private note** and published as a **tagged log** on Aztec L2.  
+   - Transaction signing and fee handling are performed via Azguard’s in-wallet SDK.
+
+---
+
+3. **Message Discovery & Reading**  
+   The wallet triggers PXE message discovery automatically after login:
+
+   ```ts
+   await pxe.discoverNewMessages({ contractAddress: CONTRACT_ADDR });
+   const inbox = await contract.methods
+     .get_messages(account.address, 0)
+     .simulate();
+   ```
+
+   - `discoverNewMessages()` fetches encrypted logs matching the user’s tag prefix.  
+   - `get_messages()` returns up to 10 `MessageNote` entries (paginated via `offset`).  
+   - The wallet decrypts the messages locally and renders them in the UI.
+
+---
+
+4. **Transaction Fees**  
+   If the user lacks fee tokens, Azguard automatically uses a **sponsor FPC address**:
+
+   ```ini
+   SPONSOR_FPC=0xb195539cab1104d4c3705de94e4555c9630def411f025e023a31890dc56f8f2
+   ```
+
+   This ensures every user can send messages even without direct gas balance.
+
+---
+
+### **In Short**
+
+Azguard Wallet fully abstracts:
+- PXE connection  
+- Account identity management  
+- Message encryption/decryption  
+- Fee sponsorship and transaction signing  
+
+It transforms the messaging flow into a **single-click UX**, while maintaining complete privacy.
+
+---
+
+## 🧱 Contract Structure
+
+### **Data Model: `MessageNote`**
+| Field | Type | Description |
+|-------|------|-------------|
+| `owner` | `AztecAddress` | Message inbox owner |
+| `sender` | `AztecAddress` | Message sender |
+| `p0..p3` | `Field` | Encrypted payload fragments |
+
+Messages are stored as bounded vectors (`BoundedVec<MessageNote,10>`).  
+
+---
+
+### **Core Functions**
+
+| Function | Type | Description |
+|-----------|------|-------------|
+| `init()` | initializer | Sets up the contract instance. |
+| `ping() -> Field` | view | Simple health check (returns a dummy field). |
+| `get_messages(owner: AztecAddress, offset: u32)` | view | Returns up to 10 messages for the given owner, paginated by offset. |
+
+---
+
+## 🧩 CLI Usage (for developers)
+
+```bash
+# 1) Discover new messages (PXE sync)
+aztec-cli pxe discover --contract $CONTRACT_ADDR --node $NODE_URL
+
+# 2) Read messages
+aztec-cli call   --contract $CONTRACT_ADDR   --function get_messages   --args <OWNER_AZTEC_ADDRESS> 0   --node $NODE_URL
 ```
-curl -s https://api.aztecanonymousmessenger.com/status \
-| jq '{ ok, pxe, mode, contract }'
+
+> The discovery step must run **before** calling `get_messages`, otherwise PXE will not have decrypted notes yet.
+
+---
+
+## 🧠 SDK Flow Example
+
+```ts
+import { createPXEClient } from "@aztec/aztec.js";
+const pxe = await createPXEClient(process.env.NODE_URL!);
+
+// Discover messages
+await pxe.discoverNewMessages({ contractAddress: CONTRACT_ADDR });
+
+// Read messages
+const inbox = await contract.methods.get_messages(owner, 0).simulate();
+console.log(inbox);
 ```
-**Expected (example):**  
 
-{ "ok": true, "pxe": "http://127.0.0.1:8080", "mode": "sandbox", "contract": "0x..." }  
+---
 
-**2)👤 Create your wallet**  
+## 🔒 Security Notes
+
+- **Integrity:** Messages are hashed into the Aztec note commitment tree; tampering is impossible without breaking ZK proofs.  
+- **Privacy:** Each message is encrypted per recipient and tagged for PXE discovery only.  
+- **Delivery Guarantee:** Off-chain encrypted logs do not guarantee delivery, but integrity is verifiable on-chain.  
+- **Replay Protection:** Every message is tied to a unique **nullifier**, preventing double reads or replays.  
+
+---
+
+## 🌐 Environment Variables
+
+```ini
+NODE_URL=https://aztec-alpha-testnet-fullnode.zkv.xyz
+CONTRACT_ADDR=0x270f4eccd3e6a4082d51a2010c7adde967df0dc89b480bfbe65ed01ec6f2e921
+SPONSOR_FPC=0xb195539cab1104d4c3705de94e4555c9630def411f025e023a31890dc56f8f2
 ```
-curl -sX POST https://api.aztecanonymousmessenger.com/create-account \
-  -H 'content-type: application/json' \
-  -d '{"alias":"first-demo"}' \
-| tee /tmp/create.json \
-| jq '{ ok, alias, address, registeredInPXE, deployed, secretKeyHex, signingKeyHex }'  
-```
 
-**Copy the value of secretKeyHex from the output above (it is your wallet’s private key for this demo).**  
+---
 
-**3)📦 Deploy your wallet (writes on Aztec)**  
-```
-SK=$(jq -r .secretKeyHex /tmp/create.json)
+## 🧩 Future Milestones
 
-curl -sS -X POST https://api.aztecanonymousmessenger.com/deploy-account \
-  -H 'content-type: application/json' \
-  -d "{\"alias\":\"first-demo\",\"secretKeyHex\":\"$SK\"}" \
-| jq '{ ok, alias, address, deployed, txHash }'
- ```  
+- [x] PXE integration  
+- [x] CLI testing  
+- [x] Full **Azguard Wallet** UI connection  
+- [ ] End-to-end testnet flow  
+- [ ] Aztec Scan transaction explorer support  
 
-**4)💬 Send a message (example)**  
-```
-curl -sS -X POST https://api.aztecanonymousmessenger.com/send \
-  -H 'content-type: application/json' \
-  -d '{"toAlias":"demo-peer","message":"hello from Aztec!"}' \
-| jq '{ ok, txHash, status }'
-```
-You should see deployed: true and a txHash.
+---
 
-**Contract method defaults to send. If your ABI uses a different method name, set MESSENGER_METHOD=<yourMethod> in .env.**  
-
-⚙️**Environment (.env example)**  
-```
-PORT=3000  
-PXE_URL=http://127.0.0.1:8080  
-MESSENGER_ADDR=0x0eedcf30e4692709f9752bad2308d38e8fb1lab512bf0e1ee207905eefe13415
-MESSENGER_METHOD=send  
-```
-## 🧰 Developers  
-
-For local development, ensure a PXE is reachable at PXE_URL (sandbox is easiest):  
-
-Start a sandbox PXE (one-liner varies by environment; follow Aztec installer docs).  
-
-Restart backend after updating .env:  
-```
-npm i
-pm2 start ecosystem.config.cjs --only aztec-api || pm2 restart aztec-api
-pm2 logs aztec-api --lines 100
-``` 
-
-
-Contact: GitHub Issues/Discussions (or your preferred channel)
+📜Contact: GitHub Issues/Discussions (or your preferred channel)
