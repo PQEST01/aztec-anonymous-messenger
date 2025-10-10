@@ -1,9 +1,0 @@
-{
-  "network": "pre-mini-testnet",
-  "apiBase": "https://api.aztecanonymousmessenger.com",
-  "pxeUrl": "http://127.0.0.1:8080",
-  "contracts": {
-    "privateMessenger": "0xFILL_ME_PRIVATE_MESSENGER_ADDRESS",
-    "sponsoredFPC": "0xFILL_ME_SPONSORED_FPC_ADDRESS"
-  }
-}
