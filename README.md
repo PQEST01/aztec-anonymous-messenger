@@ -1,7 +1,7 @@
 # 🚀Aztec Anonymous Messenger — pre-mini-testnet
 
 **PrivateMessenger** is a zero-knowledge messaging contract built on **Aztec L2**, enabling users to send and receive **encrypted private notes** directly on-chain.  
-Each message is stored as a **`MessageNote`**, discoverable only by its intended recipient via the **PXE (Private Execution Environment)**.
+Each message is stored as a **`MessageNote`**, discoverable only by its intended recipient via the PXE (Private Execution Environment).
 
 > The contract leverages Aztec’s `note` system, tagged encrypted logs, and nullifier logic to ensure message privacy, integrity, and non-replayability.
 
@@ -98,8 +98,7 @@ Azguard acts as a **bridge** between the front-end UI and the Aztec private envi
 
 Azguard Wallet fully abstracts:
 - PXE connection  
-- Account identity management  
-- Message encryption/decryption  
+- Account identity management   
 - Fee sponsorship and transaction signing  
 
 It transforms the messaging flow into a **single-click UX**, while maintaining complete privacy.
