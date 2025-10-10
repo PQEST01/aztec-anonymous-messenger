@@ -1,4 +1,4 @@
-# 🕵️‍♂️ PrivateMessenger — Private Messaging on Aztec Network
+# 🚀Aztec Anonymous Messenger — pre-mini-testnet
 
 **PrivateMessenger** is a zero-knowledge messaging contract built on **Aztec L2**, enabling users to send and receive **encrypted private notes** directly on-chain.  
 Each message is stored as a **`MessageNote`**, discoverable only by its intended recipient via the **PXE (Private Execution Environment)**.
@@ -13,7 +13,7 @@ Each message is stored as a **`MessageNote`**, discoverable only by its intended
 
 **PXE URL:** https://aztec-alpha-testnet-fullnode.zkv.xyz
 
-**ABI:** src/contract/PrivateMessenger.json  
+**ABI:** contract/PrivateMessenger.json  
 
 ---
 
